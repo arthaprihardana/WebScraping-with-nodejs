@@ -1,0 +1,25 @@
+{
+  "_baseURL":"localhost",
+  "_port":"8081",
+  "_params":{
+    "origin":"o1",
+    "destination":"d1",
+    "culture":"culture",
+    "departure1":"dd1",
+    "departure2":"dd2",
+    "r":"r",
+    "adult":"ADT",
+    "children":"CHD",
+    "infantInLap":"inl",
+    "s":"s",
+    "mon":"mon",
+    "currency":"cc",
+    "c":"c"
+  },
+  "_mysql":{
+    "host":"localhost",
+    "user":"root",
+    "password":"",
+    "database":"scrap"
+  }
+}
