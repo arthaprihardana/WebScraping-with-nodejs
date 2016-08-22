@@ -1,5 +1,3 @@
-// const http=require('http');
-// const url=require('url');
 const qs = require('qs');
 const assert = require('assert');
 const express=require('express');
@@ -61,32 +59,7 @@ var scrp=function(baseurl, prm, tgl, cb) {
       var $ = cheerio.load(html);
       var jadwal="";
       var r="";
-      
-        /** */
-        //var form={
-        //    "tanggal": "2016-10-01",
-        //    "origin": "CGK",
-        //    "destination": "BDG",
-        //    "currency": "IDR",
-        //    "jamBerangkat": "05:30",
-        //    "jamTiba": "09:30",
-        //    "hargaDewasa": "528.100IDR",
-        //    "hargaAnak": "528.100IDR",
-        //    "waktuTempuh": "1h 55m"
-        //}
         var atbdata=[];
-        /** */
-    // ga kepake
-      //schema["title"]="penerbangan";
-      //schema["origin"]=params.o1;
-      //schema["destination"]=params.d1;
-      //schema["dd1"]=tgl;
-      //// schema["dd1"]=params.dd1;
-      //// schema["dd2"]=params.dd2;
-      //schema["currency"]=params.cc;
-      //schema["dt"]=[];
-      //schema["dt"].push({});
-      //
       $('.js_availability_container').filter(function() {
         var data = $(this);
         jadwal=data.children().first().children().first().text();
@@ -98,10 +71,6 @@ var scrp=function(baseurl, prm, tgl, cb) {
         var pp=(params.CHD>0) ? _.chunk(price,2) : _.chunk(price,1);
         var ee=_.chunk(wkt,2);
         var jj=[];
-        // gakepake
-        //schema["dt"][0][r]={};
-        //schema["dt"][0][r]["jadwal"]=[];
-        //
         for(var j=0;j<ff.length;j++) {
           var b=ff[j];
           var c=pp[j];
@@ -112,22 +81,6 @@ var scrp=function(baseurl, prm, tgl, cb) {
           var ccc=cc.replace(clearspace,"");
           var ddd=(params.CHD>0) ? dd.replace(clearspace,"") : '';
           var x={};
-          
-          // ga kepake
-          //x["berangkat"]={};
-          //x["berangkat"]["jam"]=b[0].children[0].data;
-          //x["berangkat"]["kdOrigin"]=params.o1;
-          //x["tiba"]={};
-          //x["tiba"]["jam"]=b[1].children[0].data;
-          //x["tiba"]["kdDestination"]=params.d1;
-          //x["harga"]={};
-          //x["harga"]["dewasa"]=ccc;
-          //if(params.CHD>0) {
-          //    x["harga"]["anak"]=ddd;
-          //}
-          //// x["kursiTersedia"]="";
-          //x["waktuTempuh"]=yy;
-          //
           /** sql */
             var tbdata={};
             tbdata["tanggal"]=tgl;
@@ -143,12 +96,8 @@ var scrp=function(baseurl, prm, tgl, cb) {
             tbdata["waktuTempuh"]=yy;
           /** sql */
           atbdata.push(tbdata);
-          //schema["dt"][0][r]["jadwal"].push(x);
         }
       });
-      //console.log(schema);
-      //console.log('==>', atbdata);
-      //cb(null, schema);
       cb(null, atbdata);
     } catch (e) {
       cb(e);
@@ -207,7 +156,7 @@ router.route('/')
 router.route('/scrape')
   .get(function(req, res){
     var params=req.query;
-    if(params.ADT > 0 /*&& params.dd1 != ""*/) {
+    if(params.ADT > 0) {
       // var _baseurl='https://booking.airasia.com/Flight/Select?'+qs.stringify(params);
       var _baseurl='https://booking.airasia.com/Flight/Select?';
       var aschema=[];
@@ -218,7 +167,6 @@ router.route('/scrape')
         cnt+=1;
         tgl.push(i.format("YYYY-MM-DD"));
       }
-      // console.log(tgl);
       if(tgl.length==cnt) {
         tgl.forEach(function(v) {
           acb.push(function(){
@@ -243,7 +191,6 @@ router.route('/scrape')
             for(var i=0;i<aschema.length;i++) {
                 var step2=aschema[i];
                 for(var j=0;j<step2.length;j++) {
-                    //console.log('===>', step2[j]);
                     var query = connection.query('INSERT INTO data SET ?', step2[j], function(err, result) {
                         // Neat! 
                     });
@@ -264,4 +211,3 @@ router.route('/scrape')
 app.use('/api',router);
 app.listen(port)
 console.log('Mulai di port '+port);
-// exports = module.exports = app;
